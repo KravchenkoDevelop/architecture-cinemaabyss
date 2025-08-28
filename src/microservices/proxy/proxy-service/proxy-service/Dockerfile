@@ -1,30 +1,26 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# === Build stage ===
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
+ARG BUILD_CONFIGURATION=Release
+
+WORKDIR /src
+COPY . .
+
+# Восстановление NuGet-пакетов с кэшированием
+RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
+    dotnet restore
+
+# Публикация self-contained для linux-x64
+RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
+    dotnet publish -c ${BUILD_CONFIGURATION} --self-contained true -r linux-x64 -o /app
+
+# === Runtime stage ===
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+
 WORKDIR /app
-EXPOSE 8080
+COPY --from=build /app /app
+
+ENV ASPNETCORE_URLS=http://+:8081
 EXPOSE 8081
 
-
-# This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["proxy-service/proxy-service.csproj", "proxy-service/"]
-RUN dotnet restore "./proxy-service/proxy-service.csproj"
-COPY . .
-WORKDIR "/src/proxy-service"
-RUN dotnet build "./proxy-service.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-# This stage is used to publish the service project to be copied to the final stage
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./proxy-service.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "proxy-service.dll"]

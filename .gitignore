@@ -155,3 +155,6 @@ go.work
 # Postman tests reports
 tests/postman/reports/
 /src/microservices/proxy/.vs
+/.vs
+/src/microservices/proxy/proxy-service/.vs/proxy-service
+/src/microservices/proxy/proxy-service/proxy-service/obj

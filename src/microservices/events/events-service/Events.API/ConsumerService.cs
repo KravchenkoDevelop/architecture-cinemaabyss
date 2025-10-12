@@ -1,10 +1,14 @@
 ﻿
+<<<<<<< HEAD
 using Confluent.Kafka;
 
+=======
+>>>>>>> d01950b ()
 namespace Events.API
 {
     public class ConsumerService : BackgroundService
     {
+<<<<<<< HEAD
         private readonly string[] topics = new[] { "movie-events", "user-events", "payment-events" };
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -38,6 +42,11 @@ namespace Events.API
             });
 
             return Task.CompletedTask;
+=======
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            throw new NotImplementedException();
+>>>>>>> d01950b ()
         }
     }
 }

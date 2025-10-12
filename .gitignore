@@ -161,3 +161,8 @@ tests/postman/reports/
 /src/microservices/events/.vs
 /src/microservices/events/events-service/.vs/events-service
 /src/microservices/events/events-service/obj
+/src/microservices/events/events-service/.vs/ProjectEvaluation
+/src/microservices/events/events-service/Events.API/obj
+/src/microservices/events/events-service/Events.API/Events.API.csproj.user
+/src/microservices/proxy/Proxy.API/obj
+*.user

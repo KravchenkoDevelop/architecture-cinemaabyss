@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/name: {{ include "cinemaabyss.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
-  replicas: {{ .Values.eventsService.replicas }}
+  replicas: {{ .Values.eventsService.replicas | default 1 }}
   selector:
     matchLabels:
       app: events-service
@@ -24,8 +24,25 @@ spec:
         app: events-service
     spec:
       containers:
-      - name: events-service
-       .... тут
+        - name: events-service
+          image: "{{ .Values.eventsService.image.repository }}:{{ .Values.eventsService.image.tag }}"
+          imagePullPolicy: {{ .Values.eventsService.image.pullPolicy | default "IfNotPresent" }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.eventsService.containerPort | default 8080 }}
+              protocol: TCP
+          env:
+            - name: KAFKA_BROKER
+              value: {{ .Values.global.kafkaBroker | quote }}
+            - name: LOG_LEVEL
+              value: {{ .Values.global.logLevel | default "info" | quote }}
+          resources:
+            requests:
+              cpu: {{ .Values.eventsService.resources.requests.cpu | default "100m" }}
+              memory: {{ .Values.eventsService.resources.requests.memory | default "128Mi" }}
+            limits:
+              cpu: {{ .Values.eventsService.resources.limits.cpu | default "500m" }}
+              memory: {{ .Values.eventsService.resources.limits.memory | default "256Mi" }}
 ---
 apiVersion: v1
 kind: Service
@@ -37,5 +54,12 @@ metadata:
     app.kubernetes.io/name: {{ include "cinemaabyss.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
- ........ и тут
+  type: {{ .Values.eventsService.service.type | default "ClusterIP" }}
+  ports:
+    - name: http
+      port: {{ .Values.eventsService.service.port | default 8080 }}
+      targetPort: {{ .Values.eventsService.containerPort | default 8080 }}
+      protocol: TCP
+  selector:
+    app: events-service
 {{- end }}

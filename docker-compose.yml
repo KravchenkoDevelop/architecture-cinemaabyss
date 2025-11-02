@@ -139,6 +139,35 @@ services:
     networks:
       - cinemaabyss-network
 
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: swagger-ui
+    ports:
+      - "8085:8080"
+    volumes:
+      - ./api-specification.yaml:/api/openapi.yaml:ro
+    environment:
+      SWAGGER_JSON: /api/openapi.yaml
+      BASE_URL: /docs
+    networks:
+      - cinemaabyss-network
+
+  postman-tests:
+    build:
+      context: ./tests/postman
+      dockerfile: Dockerfile
+    container_name: postman-tests
+    depends_on:
+      - postgres
+      - kafka
+      - monolith
+      - movies-service
+      - events-service
+    networks:
+      - cinemaabyss-network
+
+
+
 volumes:
   postgres-data:
 

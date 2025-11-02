@@ -141,4 +141,18 @@ else
   echo "❌ Some tests failed. Check the reports for details."
 fi
 
+
+# Display results
+if [ $EXIT_CODE -eq 0 ]; then
+  echo "✅ All tests passed!"
+else
+  echo "❌ Some tests failed. Check the reports for details."
+fi
+
+# Wait for keypress if running interactively
+if [ -t 0 ]; then
+  echo ""
+  read -n 1 -s -r -p "Press any key to exit..."
+  echo ""
+fi
 exit $EXIT_CODE

@@ -1,17 +1,4 @@
-﻿namespace Events.API.Models
-{
-    public record Payment 
-    {
-        public int PaymentId { get; set; }
+﻿namespace Events.API.Models;
 
-        public int UserId { get; set; }
+public record Payment(int PaymentId, int UserId, double Amount, string Status, DateTime Timestamp, string? MethodType);
 
-        public double Amount { get; set; }
-
-        public string Status { get; set; }
-
-        public DateTime Timestamp { get; set; }
-
-        public string? MethodType { get; set; }
-    }
-}

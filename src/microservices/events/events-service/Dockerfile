@@ -9,9 +9,7 @@ COPY . .
 RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
     dotnet restore
 
-RUN dotnet publish ./Events.API/Events.API.csproj -c Release -o /app/api
-RUN dotnet publish ./Events.Producer/Events.Producer.csproj -c Release -o /app/producer
-RUN dotnet publish ./Events.Consumer/Events.Consumer.csproj -c Release -o /app/consumer
+RUN dotnet publish . --ignore-failed-sources --disable-parallel -c Release -o /app
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app

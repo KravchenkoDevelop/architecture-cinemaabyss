@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ﻿namespace Events.API.Models;
 
 public record Event(string Id,string Type ,DateTime TimeStamp ,object Payload );
@@ -17,3 +18,8 @@ public record Event(string Id,string Type ,DateTime TimeStamp ,object Payload );
     }
 }
 >>>>>>> d01950b ()
+=======
+﻿namespace Events.API.Models;
+
+public record Event(string Id,string Type ,DateTime TimeStamp ,object Payload );
+>>>>>>> 07cf725 ()

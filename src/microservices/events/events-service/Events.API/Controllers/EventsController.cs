@@ -1,9 +1,5 @@
 ﻿using Confluent.Kafka;
 using Events.API.Models;
-<<<<<<< HEAD
-=======
-using Microsoft.AspNetCore.Http;
->>>>>>> d01950b ()
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -13,7 +9,6 @@ namespace Events.API.Controllers;
 [ApiController]
 public class EventsController : ControllerBase
 {
-<<<<<<< HEAD
     private readonly IProducer<string, string> _producer;
 
     public EventsController(IProducer<string, string> producer)
@@ -21,15 +16,12 @@ public class EventsController : ControllerBase
         _producer = producer;
     }
 
-=======
->>>>>>> d01950b ()
 
     [HttpGet]
     [Route("health")]
     public IActionResult Get() => Ok(new { status = true });
 
     [HttpPost("movie")]
-<<<<<<< HEAD
     public async Task<IActionResult> PublishMovieEvent([FromBody] Movie movieEvent)
     {
         return await PublishAsync(
@@ -86,35 +78,3 @@ public class EventsController : ControllerBase
 }
 
 
-=======
-    public async Task<IActionResult> CreateMovieEvent([FromBody] Event eventJson, IProducer<string,string> producer)
-    {
-       var result = ProcessAndDeliverMessage<Event>(producer, eventJson);
-
-        return Ok(result);
-    }
-
-    [HttpPost("user")]
-    public async Task<IActionResult> CreateUserEvent([FromBody] string? userEventJson, IProducer<string,string> producer)
-    {
-        
-        return Ok();
-    }
-
-    [HttpPost("payment")]
-    public async Task<IActionResult> CreatePaymentEvent([FromBody] string? paymentEventJson, IProducer<string,string> producer)
-    {
-       
-
-        return Ok();
-    }
-
-    private DeliveryResult<string, string> ProcessAndDeliverMessage<T>(IProducer<string, string> producer, T type)
-    {
-        var message = new Message<string, string>();
-
-        return null;
-    }
-
-}
->>>>>>> d01950b ()

@@ -1,14 +1,18 @@
 # .github/workflows/docker-build-push.yml
 name: docker-build-push
 
-on:
-  push:
-    branches:
-      - '**'
-  pull_request:
-    branches:
-      - '**'
+on: 
   workflow_dispatch:
+  push:
+      branches: [ main, cinema ]
+      paths:
+        - 'src/**'
+        - '.github/workflows/docker-build-push.yml'
+  pull_request:
+      branches: [main]
+      paths:
+        - 'src/**'
+        - '.github/workflows/docker-build-push.yml'
 
 env:
   COMPOSE_FILE: docker-compose.yml
@@ -60,28 +64,47 @@ jobs:
   build-and-push:
     name: Build and push Docker images
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     needs: api-tests
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Login to registry
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
-          registry: ${{ secrets.REGISTRY || 'ghcr.io' }}
-          username: ${{ secrets.REGISTRY_USER }}
-          password: ${{ secrets.CR_PAT }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push images
+      - name: Extract metadata (tags, labels) for Monolith
+        id: meta-monolith
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.MONOLITH_IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,format=short
+            type=ref,event=branch
+            latest
+
+      - name: Build and push Monolith Docker image
         uses: docker/build-push-action@v4
         with:
-          context: .
-          file: ./src/microservices/proxy/Dockerfile
+          context: ./src/monolith
           push: true
-          tags: ${{ secrets.REGISTRY }}/myorg/proxy:latest
+          tags: ${{ steps.meta-monolith.outputs.tags }}
+          labels: ${{ steps.meta-monolith.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-<<<<<<< HEAD
       - name: Extract metadata (tags, labels) for Movies Service
         id: meta-movies
         uses: docker/metadata-action@v4
@@ -125,6 +148,3 @@ jobs:
           labels: ${{ steps.meta-events.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-=======
-      # При необходимости добавить build-пуш для events
->>>>>>> 9da4487 (ci: fix workflow triggers; helm: fix events-service.yaml indentation)

@@ -1,17 +1,5 @@
-﻿namespace Events.API.Models
-{
-    public record Movie : ItemBase
-    {
-        public int? Id { get; set; }
+﻿namespace Events.API.Models;
 
-        public string Title { get; set; }
+record Movie(int MovieId, string Title, string Description, string Action, int? UserId, double? Rating);
 
-        public string Description { get; set; }
 
-        string Action { get; set; }
-
-        public int? UserId { get; set; }
-
-        double? Rating { get; set; } = 0;
-    }
-}

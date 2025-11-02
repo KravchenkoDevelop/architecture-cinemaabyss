@@ -1,6 +1,5 @@
 ﻿using Confluent.Kafka;
 using Events.API.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -10,39 +9,72 @@ namespace Events.API.Controllers;
 [ApiController]
 public class EventsController : ControllerBase
 {
+    private readonly IProducer<string, string> _producer;
+
+    public EventsController(IProducer<string, string> producer)
+    {
+        _producer = producer;
+    }
+
 
     [HttpGet]
     [Route("health")]
     public IActionResult Get() => Ok(new { status = true });
 
     [HttpPost("movie")]
-    public async Task<IActionResult> CreateMovieEvent([FromBody] Event eventJson, IProducer<string,string> producer)
+    public async Task<IActionResult> PublishMovieEvent([FromBody] Movie movieEvent)
     {
-       var result = ProcessAndDeliverMessage<Event>(producer, eventJson);
-
-        return Ok(result);
+        return await PublishAsync(
+            movieEvent,
+            topic: "movie-events",
+            category: "movie",
+            idGenerator: e => $"movie-{e.MovieId}-{e.Action}");
     }
 
     [HttpPost("user")]
-    public async Task<IActionResult> CreateUserEvent([FromBody] string? userEventJson, IProducer<string,string> producer)
+    public async Task<IActionResult> PublishUserEvent([FromBody] UserEvent userEvent)
     {
-        
-        return Ok();
+        return await PublishAsync(
+            userEvent,
+            topic: "user-events",
+            category: "user",
+            idGenerator: e => $"user-{e.UserId}-{e.Action}");
     }
 
     [HttpPost("payment")]
-    public async Task<IActionResult> CreatePaymentEvent([FromBody] string? paymentEventJson, IProducer<string,string> producer)
+    public async Task<IActionResult> PublishPaymentEvent([FromBody] Payment paymentEvent)
     {
-       
-
-        return Ok();
+        return await PublishAsync(
+            paymentEvent,
+            topic: "payment-events",
+            category: "payment",
+            idGenerator: e => $"payment-{e.PaymentId}");
     }
 
-    private DeliveryResult<string, string> ProcessAndDeliverMessage<T>(IProducer<string, string> producer, T type)
+    private async Task<IActionResult> PublishAsync<TEvent>(
+        TEvent data,
+        string topic,
+        string category,
+        Func<TEvent, string> idGenerator)
     {
-        var message = new Message<string, string>();
+        var evt = new Event(idGenerator(data),
+                            category,
+                            DateTime.UtcNow,
+                            data);
 
-        return null;
+        var serialized = JsonSerializer.Serialize(evt);
+
+        var result = await _producer.ProduceAsync(
+            topic,
+            new Message<string, string>
+            {
+                Key = evt.Id,
+                Value = serialized
+            });
+
+        var response = new Response("success", result.Partition.Value, result.Offset.Value, evt);
+        return Created(string.Empty, response);
     }
-
 }
+
+

@@ -2,17 +2,18 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy test files
 COPY . .
 
-# Set default command to run tests
-ENTRYPOINT ["node", "run-tests.js"]
+RUN npm install --strict-ssl=false \
+ && npm install -g npm@latest \
+ && npm install -g newman \
+ && npm install -g newman-reporter-htmlextra
 
-# Default arguments - can be overridden at runtime
-CMD ["--environment", "docker"]
+ENV NODE_PATH=/usr/local/lib/node_modules
+ENV PATH=$PATH:/usr/local/lib/node_modules/newman/bin
+
+CMD ["newman", "run", "CinemaAbyss.postman_collection.json", \
+     "--environment", "CinemaAbyss.postman_environment.json", \
+     "--reporters", "cli,htmlextra", \
+     "--reporter-htmlextra-export", "newman/report.html"]
+

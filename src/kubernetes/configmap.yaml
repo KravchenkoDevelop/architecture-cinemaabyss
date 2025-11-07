@@ -15,5 +15,5 @@ data:
   MOVIES_SERVICE_URL: "http://movies-service:8081"
   
   # Strangler Fig configuration
-  GRADUAL_MIGRATION: "false"
-  MOVIES_MIGRATION_PERCENT: "10"
+  GRADUAL_MIGRATION: "true"
+  MOVIES_MIGRATION_PERCENT: "100"

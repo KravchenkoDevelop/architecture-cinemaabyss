@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --strict-ssl=false
+RUN npm install
 
 # Copy test files
 COPY . .

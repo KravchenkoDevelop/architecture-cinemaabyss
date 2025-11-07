@@ -63,7 +63,7 @@ services:
         config:
           status_code: 200
           content_type: application/json
-          body: '{"status":"Strangler Fig Proxy is healthy"}'
+          body: '{"status":"Proxy is healthy"}'
 
   - name: swagger-ui
     url: http://swagger-ui:8080

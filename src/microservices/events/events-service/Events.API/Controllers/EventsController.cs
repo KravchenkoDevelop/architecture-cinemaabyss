@@ -2,6 +2,7 @@
 using Events.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Events.API.Controllers;
 
@@ -10,6 +11,11 @@ namespace Events.API.Controllers;
 public class EventsController : ControllerBase
 {
     private readonly IProducer<string, string> _producer;
+    private readonly JsonSerializerOptions _jsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
 
     public EventsController(IProducer<string, string> producer)
     {
@@ -62,7 +68,7 @@ public class EventsController : ControllerBase
                             DateTime.UtcNow,
                             data);
 
-        var serialized = JsonSerializer.Serialize(evt);
+        var serialized = JsonSerializer.Serialize(evt, _jsonOptions);
 
         var result = await _producer.ProduceAsync(
             topic,

@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main, master, feature/* ]
   pull_request:
-    branches: [ main, master , feature/*]
+    branches: [ main, master, feature/* ]
   workflow_dispatch:
     inputs:
       environment:
@@ -30,42 +30,42 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Docker Compose
-        run: |
-          docker compose --version
-      
+        run: docker compose --version
+
       - name: Start services with Docker Compose
         run: |
           docker compose up -d
-          # Wait for services to be ready
-          echo "Waiting for services to be ready..."
+          echo "Waiting for services to start..."
           sleep 120
-      
+
+      - name: Wait for services
+        run: |
+          echo "Waiting for services to initialize fully..."
+          sleep 60
+          docker ps
+          echo "Containers running:"
+          docker compose ps
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
           cache-dependency-path: tests/postman/package-lock.json
-      
+
       - name: Install Newman and dependencies
         working-directory: tests/postman
         run: npm install
-      
+
       - name: Run API tests
         working-directory: tests/postman
         run: |
-
           docker compose up -d
-          # Wait for services to be ready
-          echo "Waiting for services to be ready..."
+          echo "Waiting 15 seconds before running tests..."
           sleep 15
-          # Build the Docker image
           docker build -t cinemaabyss-api-tests .
-          
-          # Run the tests in Docker
           docker run --network=cinemaabyss-network -v "$(pwd)/reports:/app/reports" cinemaabyss-api-tests
-        
-      
+
       - name: Stop services
         if: always()
         run: docker compose down

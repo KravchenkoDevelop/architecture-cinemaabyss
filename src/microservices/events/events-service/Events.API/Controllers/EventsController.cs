@@ -28,9 +28,9 @@ public class EventsController : ControllerBase
     public IActionResult Get() => Ok(new { status = true });
 
     [HttpPost("movie")]
-    public async Task<IActionResult> PublishMovieEvent([FromBody] Movie movieEvent)
+    public async Task<IActionResult> PublishMovieEvent([FromBody] MovieEvent movieEvent)
     {
-        return await PublishAsync(
+        return await PublishAsync<MovieEvent>(
             movieEvent,
             topic: "movie-events",
             category: "movie",
@@ -40,7 +40,7 @@ public class EventsController : ControllerBase
     [HttpPost("user")]
     public async Task<IActionResult> PublishUserEvent([FromBody] UserEvent userEvent)
     {
-        return await PublishAsync(
+        return await PublishAsync<UserEvent>(
             userEvent,
             topic: "user-events",
             category: "user",
@@ -48,9 +48,9 @@ public class EventsController : ControllerBase
     }
 
     [HttpPost("payment")]
-    public async Task<IActionResult> PublishPaymentEvent([FromBody] Payment paymentEvent)
+    public async Task<IActionResult> PublishPaymentEvent([FromBody] PaymentEvent paymentEvent)
     {
-        return await PublishAsync(
+        return await PublishAsync<PaymentEvent>(
             paymentEvent,
             topic: "payment-events",
             category: "payment",
@@ -78,7 +78,7 @@ public class EventsController : ControllerBase
                 Value = serialized
             });
 
-        var response = new Response("success", result.Partition.Value, result.Offset.Value, evt);
+        var response = new EventResponse("success", result.Partition.Value, result.Offset.Value, evt);
         return Created(string.Empty, response);
     }
 }

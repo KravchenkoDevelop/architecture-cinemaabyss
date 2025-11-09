@@ -1,4 +1,7 @@
-on: 
+name: Docker Build and Push
+
+on:
+  workflow_dispatch:
   push:
     branches: [ main, master, feature/* ]
     paths:
@@ -6,7 +9,6 @@ on:
       - '.github/workflows/docker-build-push.yml'
   release:
     types: [published]
-  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
@@ -21,6 +23,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -100,3 +103,5 @@ jobs:
           labels: ${{ steps.meta-events.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      

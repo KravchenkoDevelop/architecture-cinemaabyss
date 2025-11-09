@@ -1,4 +1,3 @@
-# .github/workflows/docker-build-push.yml
 name: Build and push Docker images
 
 on: 
@@ -22,7 +21,7 @@ env:
   MOVIES_SERVICE_IMAGE_NAME: ${{ github.repository }}/movies-service
   EVENTS_SERVICE_IMAGE_NAME: ${{ github.repository }}/events-service
   PROXY_SERVICE_IMAGE_NAME: ${{ github.repository }}/proxy-service
-  
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest

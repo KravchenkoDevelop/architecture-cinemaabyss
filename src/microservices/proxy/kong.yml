@@ -4,9 +4,9 @@ upstreams:
   - name: movies-upstream
     targets:
       - target: monolith:8080
-        weight: 70
-      - target: movies-service:8081
         weight: 30
+      - target: movies-service:8081
+        weight: 70
 
 services:
   - name: monolith
@@ -19,7 +19,6 @@ services:
           - /api/subscribtions
           - /api/payments
 
-  # Movies health-check (обходит балансировку)
   - name: movies-health
     url: http://movies-service:8081
     routes:
@@ -29,7 +28,7 @@ services:
           - /api/movies/health
 
   - name: movies
-    host: movies-upstream   # используем upstream
+    host: movies-upstream   
     routes:
       - name: movies-route
         strip_path: false
@@ -52,9 +51,8 @@ services:
         paths:
           - /api/events
 
-  # Kong health (возвращает 200 прямо из Kong)
   - name: kong-health
-    url: http://example.com   # фиктивный, не используется
+    url: http://example.com  
     routes:
       - name: kong-health-route
         paths:

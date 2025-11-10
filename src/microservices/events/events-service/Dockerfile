@@ -59,4 +59,6 @@ ENTRYPOINT ["dotnet", "events-service.dll"]
 =======
 # запускаем сервис
 ENTRYPOINT ["dotnet", "Events.API.dll"]
->>>>>>> d01950b ()
+
+
+

@@ -1,6 +1,5 @@
 _format_version: "3.0"
 
-
 upstreams:
   - name: movies-upstream
     targets:
@@ -20,6 +19,7 @@ services:
           - /api/subscribtions
           - /api/payments
 
+  # Movies health-check (обходит балансировку)
   - name: movies-health
     url: http://movies-service:8081
     routes:
@@ -29,23 +29,12 @@ services:
           - /api/movies/health
 
   - name: movies
-    url: http://movies-upstream
+    host: movies-upstream   # используем upstream
     routes:
-    - name: movies-route
-      strip_path: false
-      paths:
-        - /api/movies
-    healthchecks:
-      passive:
-        unhealthy:
-          http_failures: 3
-        healthy:
-          successes: 1
-    targets:
-      - target: monolith:8080
-        weight: 70
-      - target: movies-service:8081
-        weight: 30
+      - name: movies-route
+        strip_path: false
+        paths:
+          - /api/movies
 
   - name: events-health
     url: http://events-service:8082
@@ -63,8 +52,9 @@ services:
         paths:
           - /api/events
 
+  # Kong health (возвращает 200 прямо из Kong)
   - name: kong-health
-    url: http://example.com   
+    url: http://example.com   # фиктивный, не используется
     routes:
       - name: kong-health-route
         paths:
@@ -74,7 +64,7 @@ services:
         config:
           status_code: 200
           content_type: application/json
-          body: '{"status":"Proxy is healthy"}'
+          body: '{"status":"Strangler Fig Proxy is healthy"}'
 
   - name: swagger-ui
     url: http://swagger-ui:8080

@@ -1,34 +1,13 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-﻿namespace Events.API.Models;
+namespace Events.API.Models;
 
-public record Event(string Id,string Type ,DateTime TimeStamp ,object Payload );
-=======
-﻿namespace Events.API.Models
-{
-    public record Event
-    {
-        public string Id { get; set; }
+public record Event(string Id, string Type, DateTime Timestamp, object Payload);
 
-        public string Type { get; set; }
+public record MovieEvent(int MovieId, string Title, string Action, int? UserId = null,
+                   double? Rating = null, string[]? Genres = null, string? Description = null);
 
-        public DateTime TimeStamp { get; set; }
+public record UserEvent(int UserId, string Action, DateTime Timestamp, string? Username = null, string? Email = null);
 
-        public object Payload { get; set; }
-    }
-}
->>>>>>> d01950b ()
-=======
-﻿namespace Events.API.Models;
+public record PaymentEvent(int PaymentId, int UserId, double Amount, string Status, DateTime Timestamp, string? MethodType = null);
 
-	public record Event(string Id, string Type, DateTime Timestamp, object Payload);
-
-	public record MovieEvent(int MovieId, string Title, string Action, int? UserId = null,
-					   double? Rating = null, string[]? Genres = null, string? Description = null);
-
-	public record UserEvent(int UserId, string Action, DateTime Timestamp, string? Username = null, string? Email = null);
-
-	public record PaymentEvent(int PaymentId, int UserId, double Amount, string Status, DateTime Timestamp, string? MethodType = null);
-
-	public record EventResponse(string Status, int Partition, long Offset, Event Event);
+public record EventResponse(string Status, int Partition, long Offset, Event Event);
 

@@ -1,21 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-<<<<<<< HEAD
-<<<<<<< HEAD
 VisualStudioVersion = 17.14.36327.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events.API", "Events.API\Events.API.csproj", "{DA92F51A-E599-4F52-9327-09D280800387}"
-=======
-VisualStudioVersion = 17.14.36327.8 d17.14
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "events-service", "events-service.csproj", "{C6E0EEE2-E7EE-4EF1-A471-692759F41BAB}"
->>>>>>> b9aa4cc (1.1)
-=======
-VisualStudioVersion = 17.14.36327.8
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events.API", "Events.API\Events.API.csproj", "{DA92F51A-E599-4F52-9327-09D280800387}"
->>>>>>> d01950b ()
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,23 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> d01950b ()
 		{DA92F51A-E599-4F52-9327-09D280800387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA92F51A-E599-4F52-9327-09D280800387}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA92F51A-E599-4F52-9327-09D280800387}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA92F51A-E599-4F52-9327-09D280800387}.Release|Any CPU.Build.0 = Release|Any CPU
-<<<<<<< HEAD
-=======
-		{C6E0EEE2-E7EE-4EF1-A471-692759F41BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6E0EEE2-E7EE-4EF1-A471-692759F41BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6E0EEE2-E7EE-4EF1-A471-692759F41BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6E0EEE2-E7EE-4EF1-A471-692759F41BAB}.Release|Any CPU.Build.0 = Release|Any CPU
->>>>>>> b9aa4cc (1.1)
-=======
->>>>>>> d01950b ()
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

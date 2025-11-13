@@ -57,7 +57,7 @@ jobs:
       - name: Build and push Monolith Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./src/monolith
+          context: /src/monolith
           push: true
           tags: ${{ steps.meta-monolith.outputs.tags }}
           labels: ${{ steps.meta-monolith.outputs.labels }}
@@ -79,7 +79,7 @@ jobs:
       - name: Build and push Movies Service Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./src/microservices/movies
+          context: /src/microservices/movies
           push: true
           tags: ${{ steps.meta-movies.outputs.tags }}
           labels: ${{ steps.meta-movies.outputs.labels }}
@@ -101,7 +101,7 @@ jobs:
       - name: Build and push Events Service Docker image
         uses: docker/build-push-action@v4
         with:
-          context: .src/microservices/events/events-service/Dockerfile
+          context: src/microservices/events/events-service/Dockerfile
           push: true
           tags: ${{ steps.meta-events.outputs.tags }}
           labels: ${{ steps.meta-events.outputs.labels }}

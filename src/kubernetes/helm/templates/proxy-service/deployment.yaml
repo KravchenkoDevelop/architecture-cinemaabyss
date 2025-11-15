@@ -47,9 +47,9 @@ spec:
         - name: KONG_ADMIN_LISTEN
           value: "0.0.0.0:8001"
         envFrom:
-        - configMapRef:
+          - configMapRef:
             name: cinemaabyss-config
-        - secretRef:
+          - secretRef:
             name: cinemaabyss-secrets
         resources:
           {{- toYaml .Values.proxyService.resources | nindent 10 }}

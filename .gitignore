@@ -154,3 +154,15 @@ go.work
 
 # Postman tests reports
 tests/postman/reports/
+/src/microservices/proxy/.vs
+/.vs
+/src/microservices/proxy/proxy-service/.vs/proxy-service
+/src/microservices/proxy/proxy-service/proxy-service/obj
+/src/microservices/events/.vs
+/src/microservices/events/events-service/.vs/events-service
+/src/microservices/events/events-service/obj
+/src/microservices/events/events-service/.vs/ProjectEvaluation
+/src/microservices/events/events-service/Events.API/obj
+/src/microservices/events/events-service/Events.API/Events.API.csproj.user
+/src/microservices/proxy/Proxy.API/obj
+*.user

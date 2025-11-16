@@ -50,7 +50,7 @@ c4 диаграмма существующего решения
 ### Proxy в Kubernetes
 
 - Доработаны файлы [event-service.yaml](/src/kubernetes/events-service.yaml) и [proxy-service.yaml](/src/kubernetes/proxy-service.yaml)
-- Добавлен файл [kong-config-configmap.yaml](/src/kubernetes/kong-config-configmap.yaml) для настройки proxy-service
+- Добавлен файл [kong-configmap.yaml](/src/kubernetes/kong-configmap.yaml) для настройки proxy-service
 
 
 # Задание 4
@@ -63,3 +63,6 @@ c4 диаграмма существующего решения
   - [proxy-service/configmap.yaml](/src/kubernetes/helm/templates/proxy-service/configmap.yaml)
 
 
+запущенные поды в Helm
+
+![alt text](src\screenshots\helm-result.png)

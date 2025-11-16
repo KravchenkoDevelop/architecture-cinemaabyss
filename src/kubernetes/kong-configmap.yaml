@@ -6,14 +6,15 @@ metadata:
 data:
   kong.yml: |
     _format_version: "3.0"
+    _transform: true
 
     upstreams:
       - name: movies-upstream
         targets:
           - target: monolith:8080
-            weight: 70
+            weight: 100
           - target: movies-service:8081
-            weight: 30
+            weight: 0
 
     services:
       - name: monolith
@@ -26,7 +27,6 @@ data:
               - /api/subscriptions
               - /api/payments
 
-      # Movies health-check (обходит балансировку)
       - name: movies-health
         url: http://movies-service:8081
         routes:
@@ -36,16 +36,15 @@ data:
               - /api/movies/health
 
       - name: movies
-        host: movies-upstream   # используем upstream
+        host: movies-upstream
         routes:
           - name: movies-route
             strip_path: false
             paths:
               - /api/movies
 
-      # Kong health (возвращает 200 прямо из Kong)
       - name: kong-health
-        url: http://example.com   # фиктивный, не используется
+        url: http://localhost:8000
         routes:
           - name: kong-health-route
             paths:
@@ -57,30 +56,11 @@ data:
               content_type: application/json
               body: '{"status":"Strangler Fig Proxy is healthy"}'
 
-      - name: swagger-ui
-        url: http://swagger-ui:8080
-        routes:
-          - name: swagger-ui-route
-            strip_path: false
-            paths:
-              - /docs
-
-
     plugins:
       - name: cors
         config:
-          origins:
-            - "*"
-          methods:
-            - GET
-            - POST
-            - PUT
-            - DELETE
-            - PATCH
-            - OPTIONS
-          headers:
-            - Accept
-            - Authorization
-            - Content-Type
+          origins: ["*"]
+          methods: ["GET","POST","PUT","DELETE","PATCH","OPTIONS"]
+          headers: ["Accept","Authorization","Content-Type"]
           credentials: true
           max_age: 3600

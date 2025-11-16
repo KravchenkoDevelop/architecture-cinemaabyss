@@ -22,7 +22,7 @@ services:
 
   # ZooKeeper for Kafka
   zookeeper:
-    image: wurstmeister/zookeeper:latest
+    image: bitnami/zookeeper:3.9
     container_name: cinemaabyss-zookeeper
     ports:
       - "2181:2181"
@@ -31,7 +31,7 @@ services:
 
   # Kafka
   kafka:
-    image: wurstmeister/kafka:2.13-2.7.0
+    image: bitnami/kafka:3.6
     container_name: cinemaabyss-kafka
     depends_on:
       - zookeeper
@@ -118,9 +118,9 @@ services:
       KONG_PROXY_LISTEN: "0.0.0.0:8000"
       KONG_ADMIN_LISTEN: "0.0.0.0:8001"
       PORT: 8000
-      MONOLITH_URL: http://monolith:8080
-      MOVIES_SERVICE_URL: http://movies-service:8081
-      EVENTS_SERVICE_URL: http://events-service:8082
+      MONOLITH_URL: "http://monolith:8080"
+      MOVIES_SERVICE_URL: "http://movies-service:8081"
+      EVENTS_SERVICE_URL: "http://events-service:8082"
       GRADUAL_MIGRATION: "true"
       MOVIES_MIGRATION_PERCENT: "100"
       EVENTS_MIGRATION_PERCENT: "0"

@@ -48,9 +48,9 @@ spec:
           value: "0.0.0.0:8001"
         envFrom:
           - configMapRef:
-            name: cinemaabyss-config
+              name: cinemaabyss-config
           - secretRef:
-            name: cinemaabyss-secrets
+              name: cinemaabyss-secrets
         resources:
           {{- toYaml .Values.proxyService.resources | nindent 10 }}
         readinessProbe:
